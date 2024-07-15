@@ -8,7 +8,8 @@ namespace Match3
 
         private int _x;
         private int _y;
-
+        private ColorChangerPiece _colorChangerComponent;
+        public ColorChangerPiece ColorChangerComponent => _colorChangerComponent;
         public int X
         {
             get => _x;
@@ -20,6 +21,7 @@ namespace Match3
             get => _y;
             set { if (IsMovable()) { _y = value; } }
         }
+    
     
         private PieceType _type;
 
@@ -46,6 +48,7 @@ namespace Match3
             _movableComponent = GetComponent<MovablePiece>();
             _colorComponent = GetComponent<ColorPiece>();
             _clearableComponent = GetComponent<ClearablePiece>();
+            _colorChangerComponent = GetComponent<ColorChangerPiece>();
         }
 
         public void Init(int x, int y, GameGrid gameGrid, PieceType type)
@@ -55,7 +58,14 @@ namespace Match3
             _gameGrid = gameGrid;
             _type = type;
         }
-
+        private void OnMouseOver()
+        {
+            if (Input.GetMouseButtonDown(1)) // Right mouse button
+            {
+                Debug.Log($"Right-click detected on piece at ({X}, {Y})");
+                _gameGrid.RemoveSinglePieceMatch(this);
+            }
+        }
         private void OnMouseEnter() => _gameGrid.EnterPiece(this);
 
         private void OnMouseDown() => _gameGrid.PressPiece(this);
@@ -67,5 +77,9 @@ namespace Match3
         public bool IsColored() => _colorComponent != null;
 
         public bool IsClearable() => _clearableComponent != null;
+        
+        public bool IsColorChanger() => _colorChangerComponent != null;
+
     }
+    
 }

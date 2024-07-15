@@ -8,6 +8,7 @@ namespace Match3
         RowClear,
         ColumnClear,
         Rainbow,
+        ColorChanger, // New type for 6-candy match
         Count,
     }
 }
